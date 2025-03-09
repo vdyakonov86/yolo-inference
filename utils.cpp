@@ -1,12 +1,3 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang
- * @LastEditTime: 2024-10-30 20:53:28
- * @FilePath: \cpp\utils.cpp
- * @Description: utilities source file
- */
-
 #include "utils.h"
 
 uint16_t float32_to_float16(float value)

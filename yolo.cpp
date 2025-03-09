@@ -1,35 +1,10 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang 58515915+taifyang@users.noreply.github.com
- * @LastEditTime: 2024-11-23 09:29:26
- * @FilePath: \cpp\yolo.cpp
- * @Description: source file for YOLO algorithm
- */
-
 #include <chrono>
 #include "yolo.h"
 #include "utils.h"
 
-#ifdef _YOLO_LIBTORCH
-	#include "yolo_libtorch.h"
-#endif // _YOLO_Libtorch
-
-#ifdef _YOLO_ONNXRUNTIME
-	#include "yolo_onnxruntime.h"
-#endif // _YOLO_ONNXRuntime
-
 #ifdef _YOLO_OPENCV
 	#include "yolo_opencv.h"
 #endif // _YOLO_OpenCV
-
-#ifdef _YOLO_OPENVINO
-	#include "yolo_openvino.h"
-#endif // _YOLO_OpenVINO
-
-#ifdef _YOLO_TENSORRT
-	#include "yolo_tensorrt.h"
-#endif // _YOLO_TensorRT
 
 void YOLO::infer(const std::string file_path, bool save_result, bool show_result, char* argv[])
 {
@@ -51,20 +26,23 @@ void YOLO::infer(const std::string file_path, bool save_result, bool show_result
 		}
 
 		//warm up
-		for(int i=0; i<10; ++i)
-		{
-			pre_process();
-			process();
-			post_process();
-		}	
+		// for(int i=0; i<10; ++i)
+		// {
+			// pre_process();
+			// process();
+			// post_process();
+		// }	
 
 		auto start = std::chrono::steady_clock::now();
-		for(int i=0; i<1000; ++i)
-		{
-			pre_process();
-			process();
-			post_process();
-		}		
+		// for(int i=0; i<1000; ++i)
+		// {
+		// 	pre_process();
+		// 	process();
+		// 	post_process();
+		// }		
+		pre_process();
+		process();
+		post_process();
 		auto end = std::chrono::steady_clock::now();	
 		std::chrono::duration<double> duration = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);		
 		std::cout << "avg cost run on 1000 times:" << duration.count() << "ms" << std::endl;
@@ -186,26 +164,6 @@ CreateFactory::CreateFactory()
 {
 	m_create_registry.resize(5, std::vector<CreateFunction>(3));
 
-#ifdef _YOLO_LIBTORCH
-	register_class(Backend_Type::Libtorch, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Classify>(); });
-	register_class(Backend_Type::Libtorch, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Detect>(); });
-	register_class(Backend_Type::Libtorch, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Segment>(); });
-#else
-	register_class(Backend_Type::Libtorch, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::Libtorch, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::Libtorch, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
-#endif // _YOLO_Libtorch
-
-#ifdef _YOLO_ONNXRUNTIME
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Classify>(); });
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Detect>(); });
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Segment>(); });
-#else
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
-#endif // _YOLO_ONNXRuntime
-
 #ifdef _YOLO_OPENCV
 	register_class(Backend_Type::OpenCV, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenCV_Classify>(); });
 	register_class(Backend_Type::OpenCV, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenCV_Detect>(); });
@@ -215,24 +173,4 @@ CreateFactory::CreateFactory()
 	register_class(Backend_Type::OpenCV, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
 	register_class(Backend_Type::OpenCV, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
 #endif // _YOLO_OpenCV
-
-#ifdef _YOLO_OPENVINO
-	register_class(Backend_Type::OpenVINO, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Classify>(); });
-	register_class(Backend_Type::OpenVINO, Task_Type::Detect,[]() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Detect>(); });
-	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Segment>(); });
-#else
-	register_class(Backend_Type::OpenVINO, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::OpenVINO, Task_Type::Detect,[]() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
-#endif // _YOLO_OpenVINO
-
-#ifdef _YOLO_TENSORRT
-	register_class(Backend_Type::TensorRT, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_TensorRT_Classify>(); });
-	register_class(Backend_Type::TensorRT, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_TensorRT_Detect>(); });
-	register_class(Backend_Type::TensorRT, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_TensorRT_Segment>(); });
-#else
-	register_class(Backend_Type::TensorRT, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::TensorRT, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
-	register_class(Backend_Type::TensorRT, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
-#endif // _YOLO_TensorRT
 }
