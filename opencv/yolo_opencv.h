@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "yolo_classify.h"
-#include "yolo_detect.h"
-#include "yolo_segment.h"
-#include "utils.h"
+#include "../include/yolo_classify.h"
+#include "../include/yolo_detect.h"
+#include "../include/yolo_segment.h"
+#include "../include/utils.h"
 #include <opencv2/opencv.hpp>
 
 /**

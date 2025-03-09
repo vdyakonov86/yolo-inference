@@ -1,6 +1,6 @@
 #include <chrono>
-#include "yolo.h"
-#include "utils.h"
+#include "../include/yolo.h"
+#include "../include/utils.h"
 
 #ifdef _YOLO_OPENCV
 	#include "yolo_opencv.h"

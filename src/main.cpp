@@ -1,5 +1,5 @@
 
-#include "yolo.h"
+#include "../include/yolo.h"
 
 int main(int argc, char* argv[])
 {
