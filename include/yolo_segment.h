@@ -1,26 +1,17 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang 58515915+taifyang@users.noreply.github.com
- * @LastEditTime: 2024-11-22 23:20:41
- * @FilePath: \cpp\yolo_segment.h
- * @Description: segmentation algorithm class
- */
-
 #pragma once
 
 #include "yolo_detect.h"
 
-/**
- * @description: segmentation network output related parameters
- */
-struct OutputSeg
-{
-	int id;             //class id
-	float score;   		//score
-	cv::Rect box;       //bounding box
-	cv::Mat mask;    	//mask
-};
+// /**
+//  * @description: segmentation network output related parameters
+//  */
+// struct OutputSeg
+// {
+// 	int id;             //class id
+// 	float score;   		//score
+// 	cv::Rect box;       //bounding box
+// 	cv::Mat mask;    	//mask
+// };
 
 /**
  * @description: mask parameters
@@ -162,10 +153,5 @@ protected:
 	 * @return {*}
 	 */
 	float* m_output1_host;
-
-	/**
-	 * @description: segmentation model output
-	 */
-	std::vector<OutputSeg> m_output_seg;
 };
 
