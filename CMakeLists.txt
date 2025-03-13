@@ -20,7 +20,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_compile_options(-w)
 add_compile_options(-D_YOLO_OPENCV)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/opencv SOURCES)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Create the library target
 add_library(yoloInference STATIC ${SOURCES} ${HEADERS})

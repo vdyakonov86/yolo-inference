@@ -13,11 +13,11 @@ void YOLO_OpenCV::init(const Algo_Type algo_type, const Device_Type device_type,
 {
 	m_algo_type = algo_type;
 
-	if(!std::filesystem::exists(model_path))
-	{
-		std::cerr << "model not exists!" << std::endl;
-		std::exit(-1);
-	}
+	// if(!std::filesystem::exists(model_path))
+	// {
+	// 	std::cerr << "model not exists!" << std::endl;
+	// 	std::exit(-1);
+	// }
 	m_net = cv::dnn::readNet(model_path);
 	
 	if (model_type != FP32 && model_type != FP16)

@@ -110,7 +110,7 @@ public:
 	 * @param {char*} argv			argv
 	 * @return {*}
 	 */	
-	void infer(const std::string file_path, bool save_result = true, bool show_result = true, char* argv[] = {}); 
+	void infer(const cv::Mat &img, bool save_result = true, bool show_result = true); 
 
 	/**
 	 * @description: release interface
