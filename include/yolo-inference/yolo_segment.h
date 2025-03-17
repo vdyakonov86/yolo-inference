@@ -1,6 +1,6 @@
 #pragma once
 
-#include "yolo_detect.h"
+#include "yolo-inference/yolo_detect.h"
 
 // /**
 //  * @description: segmentation network output related parameters

@@ -1,20 +1,10 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang
- * @LastEditTime: 2024-10-30 20:49:01
- * @FilePath: \cpp\opencv\yolo_opencv.h
- * @Description: opencv inference header file for YOLO algorithm
- */
-
 #pragma once
 
-#include "include/yolo_classify.h"
-#include "include/yolo_detect.h"
-#include "include/yolo_segment.h"
-#include "include/utils.h"
+#include "yolo-inference/yolo_classify.h"
+#include "yolo-inference/yolo_detect.h"
+#include "yolo-inference/yolo_segment.h"
+#include "yolo-inference/utils.h"
 #include <opencv2/opencv.hpp>
-
 /**
  * @description: opencv inference class for YOLO algorithm
  */

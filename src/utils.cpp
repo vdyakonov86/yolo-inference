@@ -1,4 +1,4 @@
-#include "../include/utils.h"
+#include "yolo-inference/utils.h"
 
 uint16_t float32_to_float16(float value)
 {

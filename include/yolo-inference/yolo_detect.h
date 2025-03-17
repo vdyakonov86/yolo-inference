@@ -7,10 +7,10 @@
  * @Description: detection algorithm class
  */
 
-#pragma once
+ #pragma once
 
-#include "yolo.h"
-#include "utils.h"
+ #include "yolo-inference/yolo.h"
+ #include "yolo-inference/utils.h"
 
 /**
  * @description: detection network output related parameters

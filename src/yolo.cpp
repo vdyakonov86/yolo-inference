@@ -1,9 +1,9 @@
 #include <chrono>
-#include "include/yolo.h"
-#include "include/utils.h"
+#include "yolo-inference/yolo.h"
+#include "yolo-inference/utils.h"
 
 #ifdef _YOLO_OPENCV
-	#include "yolo_opencv.h"
+	#include "yolo-opencv/yolo_opencv.h"
 #endif // _YOLO_OpenCV
 
 void YOLO::infer(const cv::Mat &img, bool save_result, bool show_result)

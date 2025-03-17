@@ -1,53 +1,38 @@
 cmake_minimum_required(VERSION 3.23)
+project(yoloInference LANGUAGES C CXX VERSION 1.0.0)
 
 option(WITH_OPENCV "build _YOLO_OPENCV" ON)
-
-project(yoloInference LANGUAGES C CXX)
-
-set(SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/yolo.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
-)
-set(HEADERS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/yolo.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/utils.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/yolo_classify.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/yolo_detect.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/yolo_segment.h
-)
-
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_compile_options(-w)
 add_compile_options(-D_YOLO_OPENCV)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/opencv SOURCES)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Create the library target
-add_library(yoloInference STATIC ${SOURCES} ${HEADERS})
-
-# Add dependencies
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS} ${OpenCV2_INCLUDE_DIRS})
+
+add_library(yoloInference SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/yolo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp)
+target_include_directories(yoloInference PRIVATE ${OpenCV_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/include")
+add_subdirectory("yolo-opencv")
 target_link_libraries(yoloInference ${OpenCV_LIBRARIES})
 
+# For installing package
+install(TARGETS yoloInference 
+    EXPORT yoloInferenceTargets
+    FILE_SET HEADERS
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include)
 
+install(DIRECTORY include/ DESTINATION include)
 
-# ------------------------------
-# file(GLOB SRCS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "yoloInferenceConfigVersion.cmake"
+    VERSION ${yoloInference_VERSION}
+    COMPATIBILITY AnyNewerVersion)
 
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+install(EXPORT yoloInferenceTargets
+    FILE yoloInferenceTargets.cmake
+    NAMESPACE yoloInference::
+    DESTINATION lib/cmake/yoloInference)
 
-# add_compile_options(-w)
-
-# set(CMAKE_CXX_STANDARD 17)
-# set(CMAKE_BUILD_TYPE "Release")
-
-# add_compile_options(-D_YOLO_OPENCV)
-# aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/opencv SRCS)
-# include_directories(${CMAKE_CURRENT_SOURCE_DIR}/opencv)
-
-# add_executable(yolo ${SRCS})
-
-# find_package(OpenCV REQUIRED)
-# include_directories(${OpenCV_INCLUDE_DIRS} ${OpenCV2_INCLUDE_DIRS})
-# target_link_libraries(yolo ${OpenCV_LIBRARIES})  
+install(FILES "yoloInferenceConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/yoloInferenceConfigVersion.cmake"
+    DESTINATION lib/cmake/yoloInference)

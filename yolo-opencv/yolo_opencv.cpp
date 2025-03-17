@@ -1,13 +1,4 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang 58515915+taifyang@users.noreply.github.com
- * @LastEditTime: 2024-07-07 16:27:40
- * @FilePath: \cpp\opencv\yolo_opencv.cpp
- * @Description: opencv inference source file for YOLO algorithm
- */
-
-#include "yolo_opencv.h"
+#include "yolo-opencv/yolo_opencv.h"
 
 void YOLO_OpenCV::init(const Algo_Type algo_type, const Device_Type device_type, const Model_Type model_type, const std::string model_path)
 {
