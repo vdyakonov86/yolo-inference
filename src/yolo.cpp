@@ -6,6 +6,10 @@
 	#include "yolo-opencv/yolo_opencv.h"
 #endif // _YOLO_OpenCV
 
+#ifdef _YOLO_ONNXRUNTIME
+	#include "yolo-onnxruntime/yolo_onnxruntime.h"
+#endif // _YOLO_ONNXRuntime
+
 void YOLO::infer(const cv::Mat &img, bool save_result, bool show_result)
 {
 	// if(!std::filesystem::exists(file_path))
@@ -174,4 +178,14 @@ CreateFactory::CreateFactory()
 	register_class(Backend_Type::OpenCV, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
 	register_class(Backend_Type::OpenCV, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
 #endif // _YOLO_OpenCV
+
+#ifdef _YOLO_ONNXRUNTIME
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Classify>(); });
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Detect>(); });
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Segment>(); });
+#else
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
+	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
+#endif // _YOLO_ONNXRuntime
 }

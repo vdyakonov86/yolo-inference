@@ -2,15 +2,34 @@ cmake_minimum_required(VERSION 3.23)
 project(yoloInference LANGUAGES C CXX VERSION 1.0.0)
 
 option(WITH_OPENCV "build _YOLO_OPENCV" ON)
+option(WITH_ONNXRUNTIME "build _YOLO_ONNXRUNTIME" ON)
+
 add_compile_options(-w)
-add_compile_options(-D_YOLO_OPENCV)
+if(WITH_OPENCV)
+    add_compile_options(-D_YOLO_OPENCV)
+endif()
+if(WITH_ONNXRUNTIME)
+    add_compile_options(-D_YOLO_ONNXRUNTIME)
+endif()
 
 find_package(OpenCV REQUIRED)
 
 add_library(yoloInference SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/yolo.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp)
 target_include_directories(yoloInference PRIVATE ${OpenCV_INCLUDE_DIRS} "${PROJECT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/include")
-add_subdirectory("yolo-opencv")
 target_link_libraries(yoloInference ${OpenCV_LIBRARIES})
+
+if(WITH_OPENCV)
+    add_subdirectory("yolo-opencv")
+endif()
+
+if(WITH_ONNXRUNTIME)
+    add_subdirectory("yolo-onnxruntime")
+    set(ONNXRUNTIME_INCLUDE_DIRS /onnxruntime/include)
+    set(ONNXRUNTIME_LIBRARY_DIRS /onnxruntime/lib)
+
+    target_include_directories(yoloInference PRIVATE ${ONNXRUNTIME_INCLUDE_DIRS})
+    target_link_libraries(yoloInference ${ONNXRUNTIME_LIBRARY_DIRS}/libonnxruntime.so)
+endif()
 
 # For installing package
 install(TARGETS yoloInference 
