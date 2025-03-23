@@ -3,6 +3,7 @@ project(yoloInference LANGUAGES C CXX VERSION 1.0.0)
 
 option(WITH_OPENCV "build _YOLO_OPENCV" ON)
 option(WITH_ONNXRUNTIME "build _YOLO_ONNXRUNTIME" ON)
+option(WITH_OPENVINO "build _YOLO_OPENVINO" ON)
 
 add_compile_options(-w)
 if(WITH_OPENCV)
@@ -10,6 +11,9 @@ if(WITH_OPENCV)
 endif()
 if(WITH_ONNXRUNTIME)
     add_compile_options(-D_YOLO_ONNXRUNTIME)
+endif()
+if(WITH_OPENVINO)
+    add_compile_options(-D_YOLO_OPENVINO)
 endif()
 
 find_package(OpenCV REQUIRED)
@@ -29,6 +33,14 @@ if(WITH_ONNXRUNTIME)
 
     target_include_directories(yoloInference PRIVATE ${ONNXRUNTIME_INCLUDE_DIRS})
     target_link_libraries(yoloInference ${ONNXRUNTIME_LIBRARY_DIRS}/libonnxruntime.so)
+endif()
+
+if(WITH_OPENVINO)
+    add_subdirectory("yolo-openvino")
+    set(OPENVINO_INCLUDE_DIRS /openvino_toolkit/runtime/include)
+    set(OPENVINO_LIBRARY_DIRS /openvino_toolkit/runtime/lib/intel64)
+    target_include_directories(yoloInference PRIVATE ${OPENVINO_INCLUDE_DIRS})
+    target_link_libraries(yoloInference ${OPENVINO_LIBRARY_DIRS}/libopenvino.so ${OPENVINO_LIBRARY_DIRS}/libopenvino_intel_cpu_plugin.so ${OPENVINO_LIBRARY_DIRS}/libopenvino_intel_gpu_plugin.so)
 endif()
 
 # For installing package

@@ -1,12 +1,3 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang 58515915+taifyang@users.noreply.github.com
- * @LastEditTime: 2024-06-17 21:32:15
- * @FilePath: \cpp\utils.h
- * @Description: utilities head file
- */
-
 #pragma once
 
 #include <iostream>

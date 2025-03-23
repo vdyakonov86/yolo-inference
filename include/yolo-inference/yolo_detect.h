@@ -1,11 +1,3 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang
- * @LastEditTime: 2024-10-30 22:18:11
- * @FilePath: \cpp\yolo_detect.h
- * @Description: detection algorithm class
- */
 
  #pragma once
 

@@ -1,12 +1,3 @@
-/*
- * @Author: taifyang 
- * @Date: 2024-06-12 09:26:41
- * @LastEditors: taifyang 58515915+taifyang@users.noreply.github.com
- * @LastEditTime: 2024-11-22 22:58:34
- * @FilePath: \cpp\yolo.h
- * @Description: header file for YOLO algorithm
- */
-
 #pragma once
 
 #include <iostream>

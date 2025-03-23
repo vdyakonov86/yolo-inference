@@ -10,6 +10,10 @@
 	#include "yolo-onnxruntime/yolo_onnxruntime.h"
 #endif // _YOLO_ONNXRuntime
 
+#ifdef _YOLO_OPENVINO
+	#include "yolo-openvino/yolo_openvino.h"
+#endif // _YOLO_OPENVINO
+
 void YOLO::infer(const cv::Mat &img, bool save_result, bool show_result)
 {
 	// if(!std::filesystem::exists(file_path))
@@ -188,4 +192,14 @@ CreateFactory::CreateFactory()
 	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
 	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
 #endif // _YOLO_ONNXRuntime
+
+#ifdef _YOLO_OPENVINO
+	register_class(Backend_Type::OpenVINO, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Classify>(); });
+	register_class(Backend_Type::OpenVINO, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Detect>(); });
+	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Segment>(); });
+#else
+	register_class(Backend_Type::OpenVINO, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
+	register_class(Backend_Type::OpenVINO, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
+	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
+#endif // _YOLO_OPENVINO
 }

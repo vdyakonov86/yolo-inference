@@ -2,16 +2,6 @@
 
 #include "yolo-inference/yolo_detect.h"
 
-// /**
-//  * @description: segmentation network output related parameters
-//  */
-// struct OutputSeg
-// {
-// 	int id;             //class id
-// 	float score;   		//score
-// 	cv::Rect box;       //bounding box
-// 	cv::Mat mask;    	//mask
-// };
 
 /**
  * @description: mask parameters
