@@ -14,6 +14,10 @@
 	#include "yolo-openvino/yolo_openvino.h"
 #endif // _YOLO_OPENVINO
 
+// #ifdef _YOLO_LIBTORCH
+// 	#include "yolo-libtorch/yolo_libtorch.h"
+// #endif // _YOLO_LIBTORCH
+
 void YOLO::infer(const cv::Mat &img, bool save_result, bool show_result)
 {
 	// if(!std::filesystem::exists(file_path))
@@ -174,6 +178,7 @@ CreateFactory::CreateFactory()
 	m_create_registry.resize(5, std::vector<CreateFunction>(3));
 
 #ifdef _YOLO_OPENCV
+	std::cout << "OPENCV backend registered" << std::endl;
 	register_class(Backend_Type::OpenCV, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenCV_Classify>(); });
 	register_class(Backend_Type::OpenCV, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenCV_Detect>(); });
 	register_class(Backend_Type::OpenCV, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenCV_Segment>(); });
@@ -184,6 +189,7 @@ CreateFactory::CreateFactory()
 #endif // _YOLO_OpenCV
 
 #ifdef _YOLO_ONNXRUNTIME
+	std::cout << "ONNXRUNTIME backend registered" << std::endl;
 	register_class(Backend_Type::ONNXRuntime, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Classify>(); });
 	register_class(Backend_Type::ONNXRuntime, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Detect>(); });
 	register_class(Backend_Type::ONNXRuntime, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_ONNXRuntime_Segment>(); });
@@ -194,6 +200,7 @@ CreateFactory::CreateFactory()
 #endif // _YOLO_ONNXRuntime
 
 #ifdef _YOLO_OPENVINO
+	std::cout << "OPENVINO backend registered" << std::endl;
 	register_class(Backend_Type::OpenVINO, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Classify>(); });
 	register_class(Backend_Type::OpenVINO, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Detect>(); });
 	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_OpenVINO_Segment>(); });
@@ -202,4 +209,15 @@ CreateFactory::CreateFactory()
 	register_class(Backend_Type::OpenVINO, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
 	register_class(Backend_Type::OpenVINO, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
 #endif // _YOLO_OPENVINO
+
+// #ifdef _YOLO_LIBTORCH
+// 	std::cout << "LIBTORCH backend registered" << std::endl;
+// 	register_class(Backend_Type::Libtorch, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Classify>(); });
+// 	register_class(Backend_Type::Libtorch, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Detect>(); });
+// 	register_class(Backend_Type::Libtorch, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return std::make_unique<YOLO_Libtorch_Segment>(); });
+// #else
+// 	register_class(Backend_Type::Libtorch, Task_Type::Classify, []() -> std::unique_ptr<YOLO> { return nullptr; });
+// 	register_class(Backend_Type::Libtorch, Task_Type::Detect, []() -> std::unique_ptr<YOLO> { return nullptr; });
+// 	register_class(Backend_Type::Libtorch, Task_Type::Segment, []() -> std::unique_ptr<YOLO> { return nullptr; });
+// #endif // _YOLO_LIBTORCH
 }

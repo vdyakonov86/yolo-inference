@@ -4,6 +4,7 @@ project(yoloInference LANGUAGES C CXX VERSION 1.0.0)
 option(WITH_OPENCV "build _YOLO_OPENCV" ON)
 option(WITH_ONNXRUNTIME "build _YOLO_ONNXRUNTIME" ON)
 option(WITH_OPENVINO "build _YOLO_OPENVINO" ON)
+option(WITH_LIBTORCH "build _YOLO_LIBTORCH" ON)
 
 add_compile_options(-w)
 if(WITH_OPENCV)
@@ -15,6 +16,9 @@ endif()
 if(WITH_OPENVINO)
     add_compile_options(-D_YOLO_OPENVINO)
 endif()
+# if(WITH_LIBTORCH)
+#     add_compile_options(-D_YOLO_LIBTORCH)
+# endif()
 
 find_package(OpenCV REQUIRED)
 
@@ -42,6 +46,32 @@ if(WITH_OPENVINO)
     target_include_directories(yoloInference PRIVATE ${OPENVINO_INCLUDE_DIRS})
     target_link_libraries(yoloInference ${OPENVINO_LIBRARY_DIRS}/libopenvino.so ${OPENVINO_LIBRARY_DIRS}/libopenvino_intel_cpu_plugin.so ${OPENVINO_LIBRARY_DIRS}/libopenvino_intel_gpu_plugin.so)
 endif()
+
+# if(WITH_LIBTORCH)
+#     # add_subdirectory("yolo-libtorch")
+#     # set(TORCH_INCLUDE_DIRS /libtorch/include /libtorch/include/torch/csrc/api/include)
+#     # set(TORCH_LIBRARIES /libtorch/lib)
+
+#     # file(GLOB LIBTORCH_LIBS "/libtorch/lib/*.so")
+#     # target_include_directories(yoloInference PRIVATE ${TORCH_INCLUDE_DIRS})
+#     # target_link_libraries(yoloInference ${TORCH_LIBRARIES} ${LIBTORCH_LIBS})
+
+#     # set(CMAKE_PREFIX_PATH /libtorch)
+#     # # set(Torch_DIR /libtorch/share/cmake/Torch)
+#     # find_package(Torch REQUIRED)
+
+#     # target_include_directories(yoloInference PUBLIC ${TORCH_INCLUDE_DIRS})
+#     # target_link_libraries(yoloInference ${TORCH_LIBRARIES})
+#     file(GLOB SRCS ${CMAKE_CURRENT_SOURCE_DIR}/yolo-libtorch/*.h ${CMAKE_CURRENT_SOURCE_DIR}/yolo-libtorch/*.cpp)
+#     aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/yolo-libtorch/ SRCS)
+#     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/yolo-libtorch/)
+
+#     set(Torch_DIR /libtorch/share/cmake/Torch)
+#     find_package(Torch REQUIRED)
+#     # target_include_directories(yoloInference PUBLIC ${TORCH_INCLUDE_DIRS})
+#     include_directories(${TORCH_INCLUDE_DIRS})
+#     target_link_libraries(yoloInference ${TORCH_LIBRARIES})
+# endif()
 
 # For installing package
 install(TARGETS yoloInference 
